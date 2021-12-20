@@ -1,50 +1,28 @@
 import React from "react";
-import { CountProvider, useCount } from "./store/cart";
+import "./app.css";
+import { CartProvider } from "./store/cart";
+import { Cart } from "./cart";
+import { Grid } from "./grid";
 
-
-function One() {
-  console.log('One component is rendered because the parent calls useCount()');
-
-  return <Two />;
-}
-
-function Two() {
-  console.log('Two component is rendered because the parent calls useCount()');
-
-  return <></>;
-}
-
-function Unrelated() {
-  // const { state } = useCount();
-  // console.log(`Unrelated component: ${state.count}`);
-
-  return <One />;
-}
-
-function Cart() {
-  const { dispatch } = useCount();
-
+function Layout() {
   return (
-    <button onClick={() => dispatch({ type: "increment" })}>
-      Increment count
-    </button>
+    <div className="app-container">
+      <div className="app-grid">
+        <Grid />
+      </div>
+      <div className="app-cart">
+        <Cart />
+      </div>
+    </div>
   );
-}
-
-function CartDisplay() {
-  const { state } = useCount();
-
-  return <div>{`The current count is ${state.count}`}</div>;
 }
 
 function App() {
   return (
     <>
-      <CountProvider>
-        <Cart />
-        <CartDisplay />
-        <Unrelated />
-      </CountProvider>
+      <CartProvider>
+        <Layout />
+      </CartProvider>
     </>
   );
 }

@@ -1,15 +1,25 @@
 import * as React from "react";
 
-type Action = { type: "increment" } | { type: "decrement" };
+type ActionIncrement = {
+  type: "increment";
+  sku_id: number;
+};
+
+type ActionDecrement = {
+  type: "decrement";
+  sku_id: number;
+};
+
+type Action = ActionIncrement | ActionDecrement;
 type Dispatch = (action: Action) => void;
 type State = { count: number };
-type CountProviderProps = { children: React.ReactNode };
+type CartProviderProps = { children: React.ReactNode };
 
-const CountStateContext = React.createContext<
+const CartStateContext = React.createContext<
   { state: State; dispatch: Dispatch } | undefined
 >(undefined);
 
-function countReducer(state: State, action: Action) {
+function cartReducer(state: State, action: Action) {
   switch (action.type) {
     case "increment": {
       return { count: state.count + 1 };
@@ -20,25 +30,25 @@ function countReducer(state: State, action: Action) {
   }
 }
 
-function CountProvider({ children }: CountProviderProps) {
-  const [state, dispatch] = React.useReducer(countReducer, { count: 0 });
+function CartProvider({ children }: CartProviderProps) {
+  const [state, dispatch] = React.useReducer(cartReducer, { count: 0 });
   const value = { state, dispatch };
 
   return (
-    <CountStateContext.Provider value={value}>
+    <CartStateContext.Provider value={value}>
       {children}
-    </CountStateContext.Provider>
+    </CartStateContext.Provider>
   );
 }
 
-function useCount() {
-  const context = React.useContext(CountStateContext);
+function useCart() {
+  const context = React.useContext(CartStateContext);
 
   if (context === undefined) {
-    throw new Error("useCount must be used within a CountProvider");
+    throw new Error("useCart must be used within a CartProvider");
   }
 
   return context;
 }
 
-export { CountProvider, useCount };
+export { CartProvider, useCart };
